@@ -30,7 +30,7 @@ RELEASE_REPO="zylhdrXP/FleurX-GKI-Release"
 # ==========================================
 # 5. Default Build Options
 # ==========================================
-# Options: Vanilla, KSU_SUSFS
+# Options: Vanilla, KSUN_SUSFS
 DEFAULT_VARIANT="Vanilla"
 # Options: CI, Release
 DEFAULT_RELEASE_TYPE="CI"

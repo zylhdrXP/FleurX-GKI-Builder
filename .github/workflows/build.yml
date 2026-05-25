@@ -9,7 +9,7 @@ on:
         type: choice
         options:
           - Vanilla
-          - KSU_SUSFS
+          - KSUN_SUSFS
         default: 'Vanilla'
       release_type:
         description: 'Build Type'

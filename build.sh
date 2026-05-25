@@ -90,17 +90,17 @@ k_lastcommit=$(git rev-parse --short HEAD)
 rm -rf "$OUTDIR"
 mkdir -p "$OUTDIR"
 
-# KSU and SUSFS
-if [ "$VARIANT" == "KSU_SUSFS" ]; then
-    echo "-> Setting up KernelSU and SUSFS..."
-    # Remove existing KSU
-    for KSU_PATH in drivers/staging/kernelsu drivers/kernelsu KernelSU KernelSU-Next; do
-        if [[ -d $KSU_PATH ]]; then
-            echo "Removing existing $KSU_PATH"
-            KSU_DIR=$(dirname "$KSU_PATH")
-            [[ -f "$KSU_DIR/Kconfig" ]] && sed -i '/kernelsu/d' "$KSU_DIR/Kconfig"
-            [[ -f "$KSU_DIR/Makefile" ]] && sed -i '/kernelsu/d' "$KSU_DIR/Makefile"
-            rm -rf $KSU_PATH
+# KSUN and SUSFS
+if [ "$VARIANT" == "KSUN_SUSFS" ]; then
+    echo "-> Setting up KernelSU-Next and SUSFS..."
+    # Remove existing KSUN
+    for KSUN_PATH in drivers/staging/kernelsu drivers/kernelsu KernelSU KernelSU-Next; do
+        if [[ -d $KSUN_PATH ]]; then
+            echo "Removing existing $KSUN_PATH"
+            KSUN_DIR=$(dirname "$KSUN_PATH")
+            [[ -f "$KSUN_DIR/Kconfig" ]] && sed -i '/kernelsu/d' "$KSUN_DIR/Kconfig"
+            [[ -f "$KSUN_DIR/Makefile" ]] && sed -i '/kernelsu/d' "$KSUN_DIR/Makefile"
+            rm -rf $KSUN_PATH
         fi
     done
 
@@ -119,7 +119,7 @@ if [ "$VARIANT" == "KSU_SUSFS" ]; then
 
     patch -p1 < "$SUSFS_PATCHES/50_add_susfs_in_${SUSFS_BRANCH}.patch" || true
     
-    # Apply extra KSU and SUSFS configs
+    # Apply extra KSUN and SUSFS configs
     cat << EOF >> arch/arm64/configs/$KERNEL_DEFCONFIG
 # Extras
 CONFIG_OVERLAY_FS_XINO_AUTO=y
