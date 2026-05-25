@@ -15,7 +15,7 @@ TIMEZONE="Asia/Jakarta"
 # 2. AnyKernel3 Configuration
 # ==========================================
 ANYKERNEL_REPO="https://github.com/zylhdrXP/AnyKernel3"
-ANYKERNEL_BRANCH="master"
+ANYKERNEL_BRANCH="gki"
 
 # ==========================================
 # 3. Toolchain Configuration
