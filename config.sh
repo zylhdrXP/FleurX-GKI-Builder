@@ -6,7 +6,7 @@
 # ==========================================
 KERNEL_NAME="FleurX-GKI"
 KERNEL_SOURCE="https://github.com/zylhdrXP/android_kernel_common-5.10"
-KERNEL_BRANCH="android12-5.10"
+KERNEL_BRANCH="linux-stable"
 KBUILD_USER="heydr"
 KBUILD_HOST="zylhdrxp"
 TIMEZONE="Asia/Jakarta"
