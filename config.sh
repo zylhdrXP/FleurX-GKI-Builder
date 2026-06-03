@@ -20,7 +20,7 @@ ANYKERNEL_BRANCH="gki"
 # ==========================================
 # 3. Toolchain Configuration
 # ==========================================
-CLANG_URL="https://github.com/greenforce-project/greenforce_clang/releases/download/20260523/gf-clang-23.0.0-20260523.tar.gz"
+CLANG_URL="https://github.com/greenforce-project/greenforce_clang/releases/download/20260601/gf-clang-23.0.0-20260601.tar.gz"
 
 # ==========================================
 # 4. GitHub Release Configuration
