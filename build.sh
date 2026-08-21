@@ -192,6 +192,7 @@ MAKE_ARGS=(
 echo "-> Building Kernel..."
 tg_send_msg "🚀 <b>Build Started</b>
 <b>Kernel:</b> <code>${LINUX_VERSION}</code>
+<b>Branch:</b> <code>${KERNEL_BRANCH}</code>
 <b>Variant:</b> <code>${VARIANT}</code>
 <b>Build Type:</b> <code>${RELEASE_TYPE}</code>"
 
@@ -238,6 +239,7 @@ cp "$KERNEL_IMAGE" AnyKernel3/
 ${HEADER}
 
 <b>Version:</b> <code>${LINUX_VERSION}</code>
+<b>Branch:</b> <code>${KERNEL_BRANCH}</code>
 <b>Variant:</b> <code>${VARIANT}</code>
 <b>SuSFS:</b> <code>${SUSFS_VERSION}</code>
 <b>Compiler:</b> <code>${COMPILER_STRING}</code>
@@ -262,6 +264,7 @@ if [ "$RELEASE_TYPE" == "Release" ] && command -v gh &> /dev/null && [ -n "$GH_T
 📦 <b>New Kernel Release!</b>
 
 <b>Kernel:</b> <code>${LINUX_VERSION}</code>
+<b>Branch:</b> <code>${KERNEL_BRANCH}</code>
 <b>Tag:</b> <code>${RELEASE}</code>
 <b>Compiler:</b> <code>${COMPILER_STRING}</code>
 
