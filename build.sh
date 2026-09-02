@@ -14,7 +14,7 @@ INPUT_VARIANT=${1:-$DEFAULT_VARIANT}
 RELEASE_TYPE=${2:-$DEFAULT_RELEASE_TYPE}
 
 if [ "$RELEASE_TYPE" == "Release" ]; then
-    VARIANTS=("Vanilla" "KSUN_SUSFS")
+    VARIANTS=("Vanilla" "ReSukiSU_SUSFS")
 else
     VARIANTS=("$INPUT_VARIANT")
 fi
@@ -106,25 +106,29 @@ for VARIANT in "${VARIANTS[@]}"; do
     rm -rf "$OUTDIR"
     mkdir -p "$OUTDIR"
 
-    # KSUN and SUSFS
-if [ "$VARIANT" == "KSUN_SUSFS" ]; then
-    echo "-> Setting up KernelSU-Next and SUSFS..."
-    # Remove existing KSUN
-    for KSUN_PATH in drivers/staging/kernelsu drivers/kernelsu KernelSU KernelSU-Next; do
-        if [[ -d $KSUN_PATH ]]; then
-            echo "Removing existing $KSUN_PATH"
-            KSUN_DIR=$(dirname "$KSUN_PATH")
-            [[ -f "$KSUN_DIR/Kconfig" ]] && sed -i '/kernelsu/d' "$KSUN_DIR/Kconfig"
-            [[ -f "$KSUN_DIR/Makefile" ]] && sed -i '/kernelsu/d' "$KSUN_DIR/Makefile"
-            rm -rf $KSUN_PATH
+    # ReSukiSU and SUSFS
+if [ "$VARIANT" == "ReSukiSU_SUSFS" ] || [ "$VARIANT" == "KSUN_SUSFS" ]; then
+    echo "-> Setting up ReSukiSU and SUSFS..."
+    # Remove existing KernelSU
+    for KSU_PATH in drivers/staging/kernelsu drivers/kernelsu KernelSU KernelSU-Next; do
+        if [[ -d $KSU_PATH || -L $KSU_PATH ]]; then
+            echo "Removing existing $KSU_PATH"
+            KSU_DIR=$(dirname "$KSU_PATH")
+            [[ -f "$KSU_DIR/Kconfig" ]] && sed -i '/kernelsu/d' "$KSU_DIR/Kconfig"
+            [[ -f "$KSU_DIR/Makefile" ]] && sed -i '/kernelsu/d' "$KSU_DIR/Makefile"
+            rm -rf $KSU_PATH
         fi
     done
 
-    # KernelSU-Next
-    curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/refs/heads/dev-susfs/kernel/setup.sh" | bash -s dev-susfs
+    # ReSukiSU
+    curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/main/kernel/setup.sh" | bash
 
     # SUSFS
-    SUSFS_DIR="$WORKDIR/susfs"
+    if [ -d "$WORKDIR/susfs4ksu" ]; then
+        SUSFS_DIR="$WORKDIR/susfs4ksu"
+    else
+        SUSFS_DIR="$WORKDIR/susfs"
+    fi
     if [ ! -d "$SUSFS_DIR" ]; then
         git clone --depth=1 -q https://gitlab.com/simonpunk/susfs4ksu -b "$SUSFS_BRANCH" "$SUSFS_DIR"
     fi
@@ -135,7 +139,7 @@ if [ "$VARIANT" == "KSUN_SUSFS" ]; then
 
     patch -p1 < "$SUSFS_PATCHES/50_add_susfs_in_${SUSFS_BRANCH}.patch" || true
     
-    # Apply extra KSUN and SUSFS configs
+    # Apply extra ReSukiSU and SUSFS configs
     cat << EOF >> arch/arm64/configs/$KERNEL_DEFCONFIG
 # Extras
 CONFIG_OVERLAY_FS_XINO_AUTO=y
@@ -143,24 +147,24 @@ CONFIG_KALLSYMS=y
 CONFIG_TMPFS_POSIX_ACL=y
 # KSU
 CONFIG_KSU=y
-CONFIG_KSU_MANUAL_HOOK=y
-# SUSFS
+# CONFIG_KSU_DEBUG is not set
+# CONFIG_KSU_TOOLKIT_SUPPORT is not set
+# CONFIG_KSU_DISABLE_MANAGER is not set
+# CONFIG_KSU_DISABLE_POLICY is not set
+CONFIG_KSU_MULTI_MANAGER_SUPPORT=y
+# CONFIG_KSU_TRACEPOINT_HOOK is not set
+# CONFIG_KSU_MANUAL_HOOK is not set
 CONFIG_KSU_SUSFS=y
-CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y
 CONFIG_KSU_SUSFS_SUS_PATH=y
 CONFIG_KSU_SUSFS_SUS_MOUNT=y
-CONFIG_KSU_SUSFS_AUTO_ADD_SUS_KSU_DEFAULT_MOUNT=y
-CONFIG_KSU_SUSFS_AUTO_ADD_SUS_BIND_MOUNT=y
 CONFIG_KSU_SUSFS_SUS_KSTAT=y
-CONFIG_KSU_SUSFS_TRY_UMOUNT=y
-CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y
 CONFIG_KSU_SUSFS_SPOOF_UNAME=y
 CONFIG_KSU_SUSFS_ENABLE_LOG=y
 CONFIG_KSU_SUSFS_HIDE_KSU_SUSFS_SYMBOLS=y
 CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y
 CONFIG_KSU_SUSFS_OPEN_REDIRECT=y
+CONFIG_KSU_SUSFS_SUS_MAP=y
 EOF
-    ./scripts/config --file arch/arm64/configs/$KERNEL_DEFCONFIG --disable CONFIG_KSU_SUSFS_SUS_SU
 
     SUSFS_VERSION=$(grep -E '^#define SUSFS_VERSION' ./include/linux/susfs.h | cut -d' ' -f3 | sed 's/"//g')
 else

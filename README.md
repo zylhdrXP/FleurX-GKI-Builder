@@ -1,11 +1,11 @@
 # Automated GKI Kernel Builder
 
-A robust, fully automated CI/CD pipeline for building Android GKI (Generic Kernel Image) kernels, powered by GitHub Actions. This builder supports automated patching for KernelSU-Next and SUSFS, AnyKernel3 packaging, Telegram notifications, and dynamic GitHub Release versioning.
+A robust, fully automated CI/CD pipeline for building Android GKI (Generic Kernel Image) kernels, powered by GitHub Actions. This builder supports automated patching for ReSukiSU and SUSFS, AnyKernel3 packaging, Telegram notifications, and dynamic GitHub Release versioning.
 
 ## Features
 
 *   **Automated Builds:** Trigger builds manually via GitHub Actions.
-*   **Variant Support:** Choose between `Vanilla` (no root) and `KSUN_SUSFS` (KernelSU-Next + SUSFS) during execution.
+*   **Variant Support:** Choose between `Vanilla` (no root) and `ReSukiSU_SUSFS` (ReSukiSU + SUSFS) during execution.
 *   **Auto-Versioning:** Automatically increments minor versions (e.g., v1.0 -> v1.1) for official releases, or uses date stamps for CI testing.
 *   **Dynamic Configuration:** Easily switch kernel sources, toolchains, and release targets via a single configuration file without modifying the core build logic.
 *   **Telegram Integration:** Sends build status and the final compiled zip directly to a Telegram chat.
@@ -41,7 +41,7 @@ If you are releasing to a different repository, the default GitHub Actions token
 2. Select the **Build GKI Kernel** workflow from the left sidebar.
 3. Click the **Run workflow** dropdown on the right.
 4. Select your desired parameters:
-    *   **Kernel Variant:** `Vanilla` or `KSUN_SUSFS`
+    *   **Kernel Variant:** `Vanilla` or `ReSukiSU_SUSFS`
     *   **Build Type:** `CI` (Testing, no GitHub release) or `Release` (Auto-versioned and published to GitHub Releases)
 5. Click **Run workflow**.
 
@@ -52,5 +52,5 @@ If you prefer to run the script locally on a Linux machine with the necessary de
 ```bash
 chmod +x build.sh
 ./build.sh <VARIANT> <RELEASE_TYPE>
-# Example: ./build.sh KSUN_SUSFS CI
+# Example: ./build.sh ReSukiSU_SUSFS CI
 ```
